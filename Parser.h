@@ -6,7 +6,7 @@ typedef struct _DAG DAG;
 
 struct _DAG {
 	char tag;
-	int	arg1;
+	int arg1;
 	int arg2;
 	int type;
 };
