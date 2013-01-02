@@ -14,9 +14,8 @@ static int tokens[TOKSSIZE];
 #define DAGSIZE 100000
 static DAG dag[DAGSIZE];
 
-
 void run(char* filename);
-int fillBuf(FILE *fp);
+int  fillBuf(FILE *fp);
 void test();
 void prToks(int n);
 

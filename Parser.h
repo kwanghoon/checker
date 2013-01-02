@@ -2,15 +2,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-typedef struct _DAG DAG;
-
-struct _DAG {
-	char tag;
-	int arg1;
-	int arg2;
-	int type;
-};
-
+int parse(int toks[], int toks_len, int dag[], int dag_size);
 
 #endif  PARSER_H
 
