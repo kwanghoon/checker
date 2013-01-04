@@ -107,11 +107,15 @@ void prToks(int n)
 				int length;
 				int j;
 
+				printf("VAR[");
+
 				start  = tokens[i+1];
 				length = tokens[i+2];
 
 				for (j = 0; j<length; j++)
 					putchar( buf[start+j] );
+
+				printf("]");
 
 				i += 2;
 			}

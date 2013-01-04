@@ -30,13 +30,10 @@ int top()
 
 /* Accept/Error code */
 enum CODE {
-  NOERROR=0,
+  NOERROR = 0,
 
-  ACCEPT=1,
-
-  REJECT          = -1,
-  STACK_OVERFLOW  = -2,
-  STACK_UNDERFLOW = -3
+  ACCEPT  = 1,
+  REJECT  = -1
 };
 
 /* States */
@@ -183,6 +180,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case ATTYPE:
 			push (ATTYPE);
 			push (S4);
+			current_tok += 1;
 			break;
 
 		default:
@@ -190,7 +188,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S1:
 		switch ( toks[current_tok] )
@@ -203,7 +201,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S2:
 		switch ( toks[current_tok] )
@@ -222,7 +220,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S3:
 		switch ( toks[current_tok] )
@@ -230,6 +228,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case ATTERM:
 			push (ATTERM);
 			push (S6);
+			current_tok += 1;
 			break;
 
 		default:
@@ -237,7 +236,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S4:
 		switch ( toks[current_tok] )
@@ -245,6 +244,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case VAR:
 			push (VAR);
 			push (S8);
+			current_tok += 3;
 			break;
 
 		default:
@@ -252,7 +252,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S5:
 		switch ( toks[current_tok] )
@@ -267,6 +267,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case ATDEF:
 			push (ATDEF);
 			push (S10);
+			current_tok += 1;
 			break;
 
 		default:
@@ -274,7 +275,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S6:
 		switch ( toks[current_tok] )
@@ -282,6 +283,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case VAR:
 			push (VAR);
 			push (S12);
+			current_tok += 3;
 			break;
 
 		default:
@@ -289,7 +291,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S7:
 		switch ( toks[current_tok] )
@@ -310,7 +312,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S8:
 		switch ( toks[current_tok] )
@@ -318,6 +320,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case COLON:
 			push (COLON);
 			push (S13);
+			current_tok += 1;
 			break;
 
 		default:
@@ -325,7 +328,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S9:
 		switch ( toks[current_tok] )
@@ -348,7 +351,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S10:
 		switch ( toks[current_tok] )
@@ -356,6 +359,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case VAR:
 			push (VAR);
 			push (S15);
+			current_tok += 3;
 			break;
 
 		default:
@@ -363,7 +367,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S11:
 		switch ( toks[current_tok] )
@@ -395,7 +399,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S12:
 		switch ( toks[current_tok] )
@@ -403,6 +407,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case COLON:
 			push (COLON);
 			push (S16);
+			current_tok += 1;
 			break;
 
 		default:
@@ -410,7 +415,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S13:
 		switch ( toks[current_tok] )
@@ -418,21 +423,25 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case TYPE:
 			push (TYPE);
 			push (S20_38);
+			current_tok += 1;
 			break;
 
 		case PI:
 			push (PI);
 			push (S21);
+			current_tok += 1;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S22_40);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S19_26_37);
+			current_tok += 3;
 			break;
 
 		default:
@@ -440,7 +449,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S14:
 		switch ( toks[current_tok] )
@@ -461,7 +470,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S15:
 		switch ( toks[current_tok] )
@@ -469,6 +478,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case EQ:
 			push (EQ);
 			push (S23);
+			current_tok += 1;
 			break;
 
 		default:
@@ -476,7 +486,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S16:
 		switch ( toks[current_tok] )
@@ -484,16 +494,19 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case PI:
 			push (PI);
 			push (S27_53);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S19_26_37);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S28_54);
+			current_tok += 1;
 			break;
 
 		default:
@@ -501,7 +514,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S17:
 		switch ( toks[current_tok] )
@@ -509,6 +522,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case DOT:
 			push (DOT);
 			push (S29);
+			current_tok += 1;
 			break;
 
 		default:
@@ -516,7 +530,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S18:
 		switch ( toks[current_tok] )
@@ -524,16 +538,19 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case ARROW:
 			push (ARROW);
 			push (S32);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S30_47_65);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S31_48_66);
+			current_tok += 1;
 			break;
 
 		default:
@@ -541,7 +558,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S19_26_37:
 		switch ( toks[current_tok] )
@@ -596,7 +613,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S20_38:
 		switch ( toks[current_tok] )
@@ -624,7 +641,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S21:
 		switch ( toks[current_tok] )
@@ -632,6 +649,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case VAR:
 			push (VAR);
 			push (S33);
+			current_tok += 3;
 			break;
 
 		default:
@@ -639,7 +657,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S22_40:
 		switch ( toks[current_tok] )
@@ -647,21 +665,25 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case TYPE:
 			push (TYPE);
 			push (S20_38);
+			current_tok += 1;
 			break;
 
 		case PI:
 			push (PI);
 			push (S39);
+			current_tok += 1;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S22_40);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S19_26_37);
+			current_tok += 3;
 			break;
 
 		default:
@@ -669,7 +691,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S23:
 		switch ( toks[current_tok] )
@@ -677,16 +699,19 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case LAM:
 			push (LAM);
 			push (S45_60);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S43_58);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S44_59);
+			current_tok += 1;
 			break;
 
 		default:
@@ -694,7 +719,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S24:
 		switch ( toks[current_tok] )
@@ -702,6 +727,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case DOT:
 			push (DOT);
 			push (S46);
+			current_tok += 1;
 			break;
 
 		default:
@@ -709,7 +735,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S25_52:
 		switch ( toks[current_tok] )
@@ -726,16 +752,19 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case ARROW:
 			push (ARROW);
 			push (S49_81);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S30_47_65);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S31_48_66);
+			current_tok += 1;
 			break;
 
 		case CLOSE:
@@ -752,7 +781,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S27_53:
 		switch ( toks[current_tok] )
@@ -760,6 +789,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case VAR:
 			push (VAR);
 			push (S50_82);
+			current_tok += 3;
 			break;
 
 		default:
@@ -767,7 +797,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S28_54:
 		switch ( toks[current_tok] )
@@ -775,16 +805,19 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case PI:
 			push (PI);
 			push (S27_53);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S19_26_37);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S28_54);
+			current_tok += 1;
 			break;
 
 		default:
@@ -792,7 +825,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S29:
 		switch ( toks[current_tok] )
@@ -815,6 +848,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case VAR:
 			push (VAR);
 			push (S8);
+			current_tok += 3;
 			break;
 
 		default:
@@ -822,7 +856,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S30_47_65:
 		switch ( toks[current_tok] )
@@ -887,7 +921,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S31_48_66:
 		switch ( toks[current_tok] )
@@ -895,16 +929,19 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case LAM:
 			push (LAM);
 			push (S45_60);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S43_58);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S44_59);
+			current_tok += 1;
 			break;
 
 		default:
@@ -912,7 +949,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S32:
 		switch ( toks[current_tok] )
@@ -920,21 +957,25 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case TYPE:
 			push (TYPE);
 			push (S20_38);
+			current_tok += 1;
 			break;
 
 		case PI:
 			push (PI);
 			push (S21);
+			current_tok += 1;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S22_40);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S19_26_37);
+			current_tok += 3;
 			break;
 
 		default:
@@ -942,7 +983,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S33:
 		switch ( toks[current_tok] )
@@ -950,6 +991,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case COLON:
 			push (COLON);
 			push (S62);
+			current_tok += 1;
 			break;
 
 		default:
@@ -957,7 +999,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S34_69:
 		switch ( toks[current_tok] )
@@ -965,6 +1007,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case CLOSE:
 			push (CLOSE);
 			push (S63_93);
+			current_tok += 1;
 			break;
 
 		default:
@@ -972,7 +1015,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S35_51_70:
 		switch ( toks[current_tok] )
@@ -980,6 +1023,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case CLOSE:
 			push (CLOSE);
 			push (S64_80_94);
+			current_tok += 1;
 			break;
 
 		default:
@@ -987,7 +1031,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S36:
 		switch ( toks[current_tok] )
@@ -995,6 +1039,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case ARROW:
 			push (ARROW);
 			push (S67);
+			current_tok += 1;
 			break;
 
 		case CLOSE:
@@ -1009,11 +1054,13 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case VAR:
 			push (VAR);
 			push (S30_47_65);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S31_48_66);
+			current_tok += 1;
 			break;
 
 		default:
@@ -1021,7 +1068,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S39:
 		switch ( toks[current_tok] )
@@ -1029,6 +1076,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case VAR:
 			push (VAR);
 			push (S68);
+			current_tok += 3;
 			break;
 
 		default:
@@ -1036,7 +1084,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S41:
 		switch ( toks[current_tok] )
@@ -1044,6 +1092,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case DOT:
 			push (DOT);
 			push (S71);
+			current_tok += 1;
 			break;
 
 		default:
@@ -1051,7 +1100,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S42_57:
 		switch ( toks[current_tok] )
@@ -1068,11 +1117,13 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case VAR:
 			push (VAR);
 			push (S72_84);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S73_85);
+			current_tok += 1;
 			break;
 
 		case CLOSE:
@@ -1089,7 +1140,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S43_58:
 		switch ( toks[current_tok] )
@@ -1135,7 +1186,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S44_59:
 		switch ( toks[current_tok] )
@@ -1143,16 +1194,19 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case LAM:
 			push (LAM);
 			push (S45_60);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S43_58);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S44_59);
+			current_tok += 1;
 			break;
 
 		default:
@@ -1160,7 +1214,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S45_60:
 		switch ( toks[current_tok] )
@@ -1168,6 +1222,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case VAR:
 			push (VAR);
 			push (S75_87);
+			current_tok += 3;
 			break;
 
 		default:
@@ -1175,7 +1230,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S46:
 		switch ( toks[current_tok] )
@@ -1213,6 +1268,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case VAR:
 			push (VAR);
 			push (S12);
+			current_tok += 3;
 			break;
 
 		default:
@@ -1220,7 +1276,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S49_81:
 		switch ( toks[current_tok] )
@@ -1228,16 +1284,19 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case PI:
 			push (PI);
 			push (S27_53);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S19_26_37);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S28_54);
+			current_tok += 1;
 			break;
 
 		default:
@@ -1245,7 +1304,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S50_82:
 		switch ( toks[current_tok] )
@@ -1253,6 +1312,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case COLON:
 			push (COLON);
 			push (S79_101);
+			current_tok += 1;
 			break;
 
 		default:
@@ -1260,7 +1320,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S55:
 		switch ( toks[current_tok] )
@@ -1287,7 +1347,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S56_77_89:
 		switch ( toks[current_tok] )
@@ -1295,6 +1355,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case CLOSE:
 			push (CLOSE);
 			push (S83_99_106);
+			current_tok += 1;
 			break;
 
 		default:
@@ -1302,7 +1363,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S61_90:
 		switch ( toks[current_tok] )
@@ -1338,7 +1399,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S62:
 		switch ( toks[current_tok] )
@@ -1346,16 +1407,19 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case PI:
 			push (PI);
 			push (S27_53);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S19_26_37);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S28_54);
+			current_tok += 1;
 			break;
 
 		default:
@@ -1363,7 +1427,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S63_93:
 		switch ( toks[current_tok] )
@@ -1399,7 +1463,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S64_80_94:
 		switch ( toks[current_tok] )
@@ -1474,7 +1538,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S67:
 		switch ( toks[current_tok] )
@@ -1482,21 +1546,25 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case TYPE:
 			push (TYPE);
 			push (S20_38);
+			current_tok += 1;
 			break;
 
 		case PI:
 			push (PI);
 			push (S39);
+			current_tok += 1;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S22_40);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S19_26_37);
+			current_tok += 3;
 			break;
 
 		default:
@@ -1504,7 +1572,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S68:
 		switch ( toks[current_tok] )
@@ -1512,6 +1580,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case COLON:
 			push (COLON);
 			push (S92);
+			current_tok += 1;
 			break;
 
 		default:
@@ -1519,7 +1588,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S71:
 		switch ( toks[current_tok] )
@@ -1542,6 +1611,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case VAR:
 			push (VAR);
 			push (S15);
+			current_tok += 3;
 			break;
 
 		default:
@@ -1549,7 +1619,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S72_84:
 		switch ( toks[current_tok] )
@@ -1603,7 +1673,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S73_85:
 		switch ( toks[current_tok] )
@@ -1611,16 +1681,19 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case LAM:
 			push (LAM);
 			push (S45_60);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S43_58);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S44_59);
+			current_tok += 1;
 			break;
 
 		default:
@@ -1628,7 +1701,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S74_86:
 		switch ( toks[current_tok] )
@@ -1636,6 +1709,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case CLOSE:
 			push (CLOSE);
 			push (S97_103);
+			current_tok += 1;
 			break;
 
 		default:
@@ -1643,7 +1717,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S75_87:
 		switch ( toks[current_tok] )
@@ -1651,6 +1725,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case COLON:
 			push (COLON);
 			push (S98_104);
+			current_tok += 1;
 			break;
 
 		default:
@@ -1658,7 +1733,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S76:
 		switch ( toks[current_tok] )
@@ -1702,7 +1777,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S78_91:
 		switch ( toks[current_tok] )
@@ -1738,7 +1813,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S79_101:
 		switch ( toks[current_tok] )
@@ -1746,16 +1821,19 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case PI:
 			push (PI);
 			push (S27_53);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S19_26_37);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S28_54);
+			current_tok += 1;
 			break;
 
 		default:
@@ -1763,7 +1841,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S83_99_106:
 		switch ( toks[current_tok] )
@@ -1848,7 +1926,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S88:
 		switch ( toks[current_tok] )
@@ -1856,6 +1934,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case DOT:
 			push (DOT);
 			push (S105);
+			current_tok += 1;
 			break;
 
 		default:
@@ -1863,7 +1942,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S92:
 		switch ( toks[current_tok] )
@@ -1871,16 +1950,19 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case PI:
 			push (PI);
 			push (S27_53);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S19_26_37);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S28_54);
+			current_tok += 1;
 			break;
 
 		default:
@@ -1888,7 +1970,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S95:
 		switch ( toks[current_tok] )
@@ -1915,7 +1997,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S96_102:
 		switch ( toks[current_tok] )
@@ -1923,6 +2005,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case CLOSE:
 			push (CLOSE);
 			push (S108_112);
+			current_tok += 1;
 			break;
 
 		default:
@@ -1930,7 +2013,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S97_103:
 		switch ( toks[current_tok] )
@@ -1992,7 +2075,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S98_104:
 		switch ( toks[current_tok] )
@@ -2000,16 +2083,19 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case PI:
 			push (PI);
 			push (S27_53);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S19_26_37);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S28_54);
+			current_tok += 1;
 			break;
 
 		default:
@@ -2017,7 +2103,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S100_111:
 		switch ( toks[current_tok] )
@@ -2025,6 +2111,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case DOT:
 			push (DOT);
 			push (S110_118);
+			current_tok += 1;
 			break;
 
 		default:
@@ -2032,7 +2119,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S105:
 		switch ( toks[current_tok] )
@@ -2040,21 +2127,25 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case TYPE:
 			push (TYPE);
 			push (S20_38);
+			current_tok += 1;
 			break;
 
 		case PI:
 			push (PI);
 			push (S21);
+			current_tok += 1;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S22_40);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S19_26_37);
+			current_tok += 3;
 			break;
 
 		default:
@@ -2062,7 +2153,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S107:
 		switch ( toks[current_tok] )
@@ -2070,6 +2161,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case DOT:
 			push (DOT);
 			push (S115);
+			current_tok += 1;
 			break;
 
 		default:
@@ -2077,7 +2169,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S108_112:
 		switch ( toks[current_tok] )
@@ -2147,7 +2239,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S109_113:
 		switch ( toks[current_tok] )
@@ -2155,6 +2247,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case DOT:
 			push (DOT);
 			push (S116_119);
+			current_tok += 1;
 			break;
 
 		default:
@@ -2162,7 +2255,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S110_118:
 		switch ( toks[current_tok] )
@@ -2170,16 +2263,19 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case PI:
 			push (PI);
 			push (S27_53);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S19_26_37);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S28_54);
+			current_tok += 1;
 			break;
 
 		default:
@@ -2187,7 +2283,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S114_120:
 		switch ( toks[current_tok] )
@@ -2235,7 +2331,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S115:
 		switch ( toks[current_tok] )
@@ -2243,21 +2339,25 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case TYPE:
 			push (TYPE);
 			push (S20_38);
+			current_tok += 1;
 			break;
 
 		case PI:
 			push (PI);
 			push (S39);
+			current_tok += 1;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S22_40);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S19_26_37);
+			current_tok += 3;
 			break;
 
 		default:
@@ -2265,7 +2365,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S116_119:
 		switch ( toks[current_tok] )
@@ -2273,16 +2373,19 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 		case LAM:
 			push (LAM);
 			push (S45_60);
+			current_tok += 1;
 			break;
 
 		case VAR:
 			push (VAR);
 			push (S43_58);
+			current_tok += 3;
 			break;
 
 		case OPEN:
 			push (OPEN);
 			push (S44_59);
+			current_tok += 1;
 			break;
 
 		default:
@@ -2290,7 +2393,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S117_121:
 		switch ( toks[current_tok] )
@@ -2338,7 +2441,7 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	case S122_123:
 		switch ( toks[current_tok] )
@@ -2386,12 +2489,11 @@ int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 			break;
 
 		}
-	break;
+		break;
 
 	} /* switch ( top() ) */ 
 
       /* END OF ACTION TABLE */
-      current_tok++;
 
     } // while 
 

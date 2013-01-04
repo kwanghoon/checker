@@ -7,8 +7,8 @@ enum Token {
 	OPEN, CLOSE, EQ, ARROW, ATTYPE,
 	ATTERM, ATDEF, VAR, NUM,
 
-        /* Needed in the parser, not int the lexer */
 	ENDOFSYMBOL, 
+        /* Needed in the parser, not int the lexer */
 	NONTERMINAL  
 };
 

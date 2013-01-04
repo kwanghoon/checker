@@ -140,7 +140,7 @@ int lexer(char buf[], int buf_size, int tokens[], int toks_size)
 						)
 					) cur_buf++;
 
-				if ( cur_buf-start+1 == 4 &&			// Token
+				if ( cur_buf-start == 4 &&			// Token
 						(  buf[start+0] == 'T'
 						&& buf[start+1] == 'y'
 						&& buf[start+2] == 'p'
@@ -170,8 +170,11 @@ int lexer(char buf[], int buf_size, int tokens[], int toks_size)
 		}
 	}
 
-	if (error == 0)
+	if (error == 0) {
+		tokens[cur_tok] = ENDOFSYMBOL;
+		cur_tok++;
 		return cur_tok;
+	}
 	else
 		return error;
 }
