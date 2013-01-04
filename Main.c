@@ -4,6 +4,7 @@
 
 #include "Lexer.h"
 #include "Parser.h"
+#include "Dag.h"
 
 #define BUFSIZE 100000
 static char buf[BUFSIZE];
@@ -125,15 +126,17 @@ void prToks(int n)
 	}
 }
 
+#define TESTCASE_DIR ""
+
 char* TestCases[] =
 	{
-		"..\\FOL.lf",
-		"..\\HOARE.lf",
-		"..\\HOL.lf",
-		"..\\Int.lf",
-		"..\\Presburger.lf",
-		"..\\STLC.lf",
-		"..\\Vector.lf",
+		TESTCASE_DIR "FOL.lf",
+		TESTCASE_DIR "HOARE.lf",
+		TESTCASE_DIR "HOL.lf",
+		TESTCASE_DIR "Int.lf",
+		TESTCASE_DIR "Presburger.lf",
+		TESTCASE_DIR "STLC.lf",
+		TESTCASE_DIR "Vector.lf",
 		0
 	};
 
@@ -167,7 +170,11 @@ void run(char* filename)
 	printf("[%s] Result = %d\n", filename, n);
 
 	if (n > 0)
+	  {
 		prToks(n);
+		printf("Parse result: %d\n",
+		       parse(tokens, n, dag, DAGSIZE));
+	  }
 
 	fflush(stdout);
 	fclose(fp);

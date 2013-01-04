@@ -2,7 +2,9 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-int parse(int toks[], int toks_len, int dag[], int dag_size);
+#include "Dag.h"
 
-#endif  PARSER_H
+int parse(int toks[], int toks_len, DAG dag[], int dag_size);
+
+#endif  // PARSER_H
 

@@ -11,4 +11,4 @@ struct _DAG {
 	int type;
 };
 
-#endif  DAG_H
+#endif  // DAG_H

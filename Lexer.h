@@ -14,4 +14,4 @@ enum Token {
 
 int lexer(char buf[], int buf_size, int tokens[], int toks_size);
 
-#endif LEXER_H
+#endif // LEXER_H

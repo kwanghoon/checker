@@ -32,7 +32,7 @@ int top()
 enum CODE {
   NOERROR=0,
 
-  ACCEPT=1;
+  ACCEPT=1,
 
   REJECT          = -1,
   STACK_OVERFLOW  = -2,
@@ -156,7 +156,7 @@ int goto_table[NOOFSTATES][NOOFNONTERMINALS] = {
 	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}
 };
 
-int parse(int toks[], int toks_len, int dag[], int dag_size)
+int parse(int toks[], int toks_len, DAG dag[], int dag_size)
 {
   int current_tok;
   int dag_top;
@@ -173,67 +173,2229 @@ int parse(int toks[], int toks_len, int dag[], int dag_size)
 
   while ( error == NOERROR && current_tok < toks_len ) 
     {
-      switch( top() )
+      /* ACTION TABLE */
+
+	switch( top() )
 	{
 	case S0:
-	  switch ( toks[current_tok] )
-	    {
-	    case ATTYPE:
-	      push (ATTYPE);  // push the current token
-	      push (S4);      // push the current state
-	      break;
+		switch ( toks[current_tok] )
+		{
+		case ATTYPE:
+			push (ATTYPE);
+			push (S4);
+			break;
 
-	    default:
-	      error = REJECT;
-	      break;
+		default:
+			error = REJECT;
+			break;
 
-	    }
-	  break;
+		}
+	break;
 
 	case S1:
-	  switch( toks[current_tok] )
-	    {
-	    case ENDOFSYMBOL:
-	      error = ACCEPT;  // current_state=S1
-	      break;
+		switch ( toks[current_tok] )
+		{
+		case ENDOFSYMBOL:
+			error = ACCEPT;
+			break;
+		default:
+			error = REJECT;
+			break;
 
-	    default:
-	      error = REJECT;
-	      break;
-	    }
-	  break;
+		}
+	break;
 
 	case S2:
-	  switch( toks[current_tok] )
-	    {
-	    case ENDOFSYMBOL: // reduce Program -> Decl
-	      pop();  // symbol
-	      pop();  // state
+		switch ( toks[current_tok] )
+		{
+		case ENDOFSYMBOL:
+			pop();
+			pop();
 
-	      next = top();
-	      push (NONTERMINAL_Program);
-	      next = goto_table[next, NONTERMINAL_Program];
-	      if (0 <= next) // Valid state
-		push (next);
-	      else 
-		error = next; 
+			next = top();
+			push (NONTERMINAL_Program);
+			next = goto_table[next][NONTERMINAL_Program];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
 
-	      break;
+		}
+	break;
 
-	    default:
-	      error = REJECT;
-	      break;
-	    }
-	  break;
-	} // switch
+	case S3:
+		switch ( toks[current_tok] )
+		{
+		case ATTERM:
+			push (ATTERM);
+			push (S6);
+			break;
 
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S4:
+		switch ( toks[current_tok] )
+		{
+		case VAR:
+			push (VAR);
+			push (S8);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S5:
+		switch ( toks[current_tok] )
+		{
+		case ENDOFSYMBOL:
+
+			next = top();
+			push (NONTERMINAL_DefDeclaration);
+			next = goto_table[next][NONTERMINAL_DefDeclaration];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case ATDEF:
+			push (ATDEF);
+			push (S10);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S6:
+		switch ( toks[current_tok] )
+		{
+		case VAR:
+			push (VAR);
+			push (S12);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S7:
+		switch ( toks[current_tok] )
+		{
+		case ATTERM:
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_TypeDeclaration);
+			next = goto_table[next][NONTERMINAL_TypeDeclaration];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S8:
+		switch ( toks[current_tok] )
+		{
+		case COLON:
+			push (COLON);
+			push (S13);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S9:
+		switch ( toks[current_tok] )
+		{
+		case ENDOFSYMBOL:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_Decl);
+			next = goto_table[next][NONTERMINAL_Decl];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S10:
+		switch ( toks[current_tok] )
+		{
+		case VAR:
+			push (VAR);
+			push (S15);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S11:
+		switch ( toks[current_tok] )
+		{
+		case ATDEF:
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_TermDeclaration);
+			next = goto_table[next][NONTERMINAL_TermDeclaration];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case ENDOFSYMBOL:
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_TermDeclaration);
+			next = goto_table[next][NONTERMINAL_TermDeclaration];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S12:
+		switch ( toks[current_tok] )
+		{
+		case COLON:
+			push (COLON);
+			push (S16);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S13:
+		switch ( toks[current_tok] )
+		{
+		case TYPE:
+			push (TYPE);
+			push (S20_38);
+			break;
+
+		case PI:
+			push (PI);
+			push (S21);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S22_40);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S19_26_37);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S14:
+		switch ( toks[current_tok] )
+		{
+		case ENDOFSYMBOL:
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_DefDeclaration);
+			next = goto_table[next][NONTERMINAL_DefDeclaration];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S15:
+		switch ( toks[current_tok] )
+		{
+		case EQ:
+			push (EQ);
+			push (S23);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S16:
+		switch ( toks[current_tok] )
+		{
+		case PI:
+			push (PI);
+			push (S27_53);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S19_26_37);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S28_54);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S17:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			push (DOT);
+			push (S29);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S18:
+		switch ( toks[current_tok] )
+		{
+		case ARROW:
+			push (ARROW);
+			push (S32);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S30_47_65);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S31_48_66);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S19_26_37:
+		switch ( toks[current_tok] )
+		{
+		case ARROW:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case VAR:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case OPEN:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case DOT:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case CLOSE:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S20_38:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_K);
+			next = goto_table[next][NONTERMINAL_K];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case CLOSE:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_K);
+			next = goto_table[next][NONTERMINAL_K];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S21:
+		switch ( toks[current_tok] )
+		{
+		case VAR:
+			push (VAR);
+			push (S33);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S22_40:
+		switch ( toks[current_tok] )
+		{
+		case TYPE:
+			push (TYPE);
+			push (S20_38);
+			break;
+
+		case PI:
+			push (PI);
+			push (S39);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S22_40);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S19_26_37);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S23:
+		switch ( toks[current_tok] )
+		{
+		case LAM:
+			push (LAM);
+			push (S45_60);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S43_58);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S44_59);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S24:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			push (DOT);
+			push (S46);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S25_52:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A);
+			next = goto_table[next][NONTERMINAL_A];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case ARROW:
+			push (ARROW);
+			push (S49_81);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S30_47_65);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S31_48_66);
+			break;
+
+		case CLOSE:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A);
+			next = goto_table[next][NONTERMINAL_A];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S27_53:
+		switch ( toks[current_tok] )
+		{
+		case VAR:
+			push (VAR);
+			push (S50_82);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S28_54:
+		switch ( toks[current_tok] )
+		{
+		case PI:
+			push (PI);
+			push (S27_53);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S19_26_37);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S28_54);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S29:
+		switch ( toks[current_tok] )
+		{
+		case ATTERM:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_TyDecls);
+			next = goto_table[next][NONTERMINAL_TyDecls];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case VAR:
+			push (VAR);
+			push (S8);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S30_47_65:
+		switch ( toks[current_tok] )
+		{
+		case ARROW:
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case VAR:
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case OPEN:
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case DOT:
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case CLOSE:
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S31_48_66:
+		switch ( toks[current_tok] )
+		{
+		case LAM:
+			push (LAM);
+			push (S45_60);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S43_58);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S44_59);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S32:
+		switch ( toks[current_tok] )
+		{
+		case TYPE:
+			push (TYPE);
+			push (S20_38);
+			break;
+
+		case PI:
+			push (PI);
+			push (S21);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S22_40);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S19_26_37);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S33:
+		switch ( toks[current_tok] )
+		{
+		case COLON:
+			push (COLON);
+			push (S62);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S34_69:
+		switch ( toks[current_tok] )
+		{
+		case CLOSE:
+			push (CLOSE);
+			push (S63_93);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S35_51_70:
+		switch ( toks[current_tok] )
+		{
+		case CLOSE:
+			push (CLOSE);
+			push (S64_80_94);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S36:
+		switch ( toks[current_tok] )
+		{
+		case ARROW:
+			push (ARROW);
+			push (S67);
+			break;
+
+		case CLOSE:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A);
+			next = goto_table[next][NONTERMINAL_A];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case VAR:
+			push (VAR);
+			push (S30_47_65);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S31_48_66);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S39:
+		switch ( toks[current_tok] )
+		{
+		case VAR:
+			push (VAR);
+			push (S68);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S41:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			push (DOT);
+			push (S71);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S42_57:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M);
+			next = goto_table[next][NONTERMINAL_M];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case VAR:
+			push (VAR);
+			push (S72_84);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S73_85);
+			break;
+
+		case CLOSE:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M);
+			next = goto_table[next][NONTERMINAL_M];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S43_58:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case VAR:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case OPEN:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case CLOSE:
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S44_59:
+		switch ( toks[current_tok] )
+		{
+		case LAM:
+			push (LAM);
+			push (S45_60);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S43_58);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S44_59);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S45_60:
+		switch ( toks[current_tok] )
+		{
+		case VAR:
+			push (VAR);
+			push (S75_87);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S46:
+		switch ( toks[current_tok] )
+		{
+		case ATDEF:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_TmDecls);
+			next = goto_table[next][NONTERMINAL_TmDecls];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case ENDOFSYMBOL:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_TmDecls);
+			next = goto_table[next][NONTERMINAL_TmDecls];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case VAR:
+			push (VAR);
+			push (S12);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S49_81:
+		switch ( toks[current_tok] )
+		{
+		case PI:
+			push (PI);
+			push (S27_53);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S19_26_37);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S28_54);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S50_82:
+		switch ( toks[current_tok] )
+		{
+		case COLON:
+			push (COLON);
+			push (S79_101);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S55:
+		switch ( toks[current_tok] )
+		{
+		case ATTERM:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_TyDecls);
+			next = goto_table[next][NONTERMINAL_TyDecls];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S56_77_89:
+		switch ( toks[current_tok] )
+		{
+		case CLOSE:
+			push (CLOSE);
+			push (S83_99_106);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S61_90:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_K);
+			next = goto_table[next][NONTERMINAL_K];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case CLOSE:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_K);
+			next = goto_table[next][NONTERMINAL_K];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S62:
+		switch ( toks[current_tok] )
+		{
+		case PI:
+			push (PI);
+			push (S27_53);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S19_26_37);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S28_54);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S63_93:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_K);
+			next = goto_table[next][NONTERMINAL_K];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case CLOSE:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_K);
+			next = goto_table[next][NONTERMINAL_K];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S64_80_94:
+		switch ( toks[current_tok] )
+		{
+		case ARROW:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case VAR:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case OPEN:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case DOT:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case CLOSE:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S67:
+		switch ( toks[current_tok] )
+		{
+		case TYPE:
+			push (TYPE);
+			push (S20_38);
+			break;
+
+		case PI:
+			push (PI);
+			push (S39);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S22_40);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S19_26_37);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S68:
+		switch ( toks[current_tok] )
+		{
+		case COLON:
+			push (COLON);
+			push (S92);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S71:
+		switch ( toks[current_tok] )
+		{
+		case ENDOFSYMBOL:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_DefDecls);
+			next = goto_table[next][NONTERMINAL_DefDecls];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case VAR:
+			push (VAR);
+			push (S15);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S72_84:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case VAR:
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case OPEN:
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case CLOSE:
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S73_85:
+		switch ( toks[current_tok] )
+		{
+		case LAM:
+			push (LAM);
+			push (S45_60);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S43_58);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S44_59);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S74_86:
+		switch ( toks[current_tok] )
+		{
+		case CLOSE:
+			push (CLOSE);
+			push (S97_103);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S75_87:
+		switch ( toks[current_tok] )
+		{
+		case COLON:
+			push (COLON);
+			push (S98_104);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S76:
+		switch ( toks[current_tok] )
+		{
+		case ATDEF:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_TmDecls);
+			next = goto_table[next][NONTERMINAL_TmDecls];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case ENDOFSYMBOL:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_TmDecls);
+			next = goto_table[next][NONTERMINAL_TmDecls];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S78_91:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A);
+			next = goto_table[next][NONTERMINAL_A];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case CLOSE:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A);
+			next = goto_table[next][NONTERMINAL_A];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S79_101:
+		switch ( toks[current_tok] )
+		{
+		case PI:
+			push (PI);
+			push (S27_53);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S19_26_37);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S28_54);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S83_99_106:
+		switch ( toks[current_tok] )
+		{
+		case ARROW:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case VAR:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case OPEN:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case DOT:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case CLOSE:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A1);
+			next = goto_table[next][NONTERMINAL_A1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S88:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			push (DOT);
+			push (S105);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S92:
+		switch ( toks[current_tok] )
+		{
+		case PI:
+			push (PI);
+			push (S27_53);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S19_26_37);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S28_54);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S95:
+		switch ( toks[current_tok] )
+		{
+		case ENDOFSYMBOL:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_DefDecls);
+			next = goto_table[next][NONTERMINAL_DefDecls];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S96_102:
+		switch ( toks[current_tok] )
+		{
+		case CLOSE:
+			push (CLOSE);
+			push (S108_112);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S97_103:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case VAR:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case OPEN:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case CLOSE:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S98_104:
+		switch ( toks[current_tok] )
+		{
+		case PI:
+			push (PI);
+			push (S27_53);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S19_26_37);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S28_54);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S100_111:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			push (DOT);
+			push (S110_118);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S105:
+		switch ( toks[current_tok] )
+		{
+		case TYPE:
+			push (TYPE);
+			push (S20_38);
+			break;
+
+		case PI:
+			push (PI);
+			push (S21);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S22_40);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S19_26_37);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S107:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			push (DOT);
+			push (S115);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S108_112:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case VAR:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case OPEN:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case CLOSE:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M1);
+			next = goto_table[next][NONTERMINAL_M1];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S109_113:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			push (DOT);
+			push (S116_119);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S110_118:
+		switch ( toks[current_tok] )
+		{
+		case PI:
+			push (PI);
+			push (S27_53);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S19_26_37);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S28_54);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S114_120:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_K);
+			next = goto_table[next][NONTERMINAL_K];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case CLOSE:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_K);
+			next = goto_table[next][NONTERMINAL_K];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S115:
+		switch ( toks[current_tok] )
+		{
+		case TYPE:
+			push (TYPE);
+			push (S20_38);
+			break;
+
+		case PI:
+			push (PI);
+			push (S39);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S22_40);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S19_26_37);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S116_119:
+		switch ( toks[current_tok] )
+		{
+		case LAM:
+			push (LAM);
+			push (S45_60);
+			break;
+
+		case VAR:
+			push (VAR);
+			push (S43_58);
+			break;
+
+		case OPEN:
+			push (OPEN);
+			push (S44_59);
+			break;
+
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S117_121:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A);
+			next = goto_table[next][NONTERMINAL_A];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case CLOSE:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_A);
+			next = goto_table[next][NONTERMINAL_A];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	case S122_123:
+		switch ( toks[current_tok] )
+		{
+		case DOT:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M);
+			next = goto_table[next][NONTERMINAL_M];
+			if (0 <= next) push (next); else error = next;
+			break;
+		case CLOSE:
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+			pop();
+
+			next = top();
+			push (NONTERMINAL_M);
+			next = goto_table[next][NONTERMINAL_M];
+			if (0 <= next) push (next); else error = next;
+			break;
+		default:
+			error = REJECT;
+			break;
+
+		}
+	break;
+
+	} /* switch ( top() ) */ 
+
+      /* END OF ACTION TABLE */
       current_tok++;
 
     } // while 
 
-  
-  
-  return 0;
+  return error;
 }
 
 
