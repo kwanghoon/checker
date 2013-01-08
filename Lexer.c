@@ -1,6 +1,6 @@
 #include "Lexer.h"
 
-int lexer(char buf[], int buf_size, int tokens[], int toks_size)
+int lexer(char buf[], int buf_len, int tokens[], int toks_size)
 {
 	int cur_buf;
 	int cur_tok;
@@ -10,7 +10,7 @@ int lexer(char buf[], int buf_size, int tokens[], int toks_size)
 	cur_tok = 0;
 	error   = 0;
 
-	while (cur_buf < buf_size && cur_tok < toks_size && error == 0)
+	while (cur_buf < buf_len && cur_tok < toks_size && error == 0)
 	{
 		switch( buf[cur_buf] )
 		{
@@ -21,7 +21,7 @@ int lexer(char buf[], int buf_size, int tokens[], int toks_size)
 			break;
 
 		case ';':
-			while (cur_buf < buf_size && buf[cur_buf] != '\n')
+			while (cur_buf < buf_len && buf[cur_buf] != '\n')
 				cur_buf++;
 			break;
 
@@ -44,7 +44,7 @@ int lexer(char buf[], int buf_size, int tokens[], int toks_size)
 			break;
 
 		case '-':
-			if (cur_buf+1 < buf_size && buf[cur_buf+1]=='>')
+			if (cur_buf+1 < buf_len && buf[cur_buf+1]=='>')
 			{
 				tokens[cur_tok] = ARROW;
 				cur_buf += 2;
@@ -57,7 +57,7 @@ int lexer(char buf[], int buf_size, int tokens[], int toks_size)
 			break;
 
 		case '/':
-			if (cur_buf+1 < buf_size && buf[cur_buf+1]=='\\')
+			if (cur_buf+1 < buf_len && buf[cur_buf+1]=='\\')
 			{
 				tokens[cur_tok] = PI;
 				cur_buf += 2;
@@ -77,7 +77,7 @@ int lexer(char buf[], int buf_size, int tokens[], int toks_size)
 
 		case '@':
 			// type
-			if (cur_buf+4 < buf_size
+			if (cur_buf+4 < buf_len
 				&& buf[cur_buf+1]=='t'
 				&& buf[cur_buf+2]=='y'
 				&& buf[cur_buf+3]=='p'
@@ -87,7 +87,7 @@ int lexer(char buf[], int buf_size, int tokens[], int toks_size)
 				cur_buf += 5;
 				cur_tok++;
 			}
-			else if(cur_buf+4 < buf_size
+			else if(cur_buf+4 < buf_len
 				&& buf[cur_buf+1]=='t'
 				&& buf[cur_buf+2]=='e'
 				&& buf[cur_buf+3]=='r'
@@ -97,7 +97,7 @@ int lexer(char buf[], int buf_size, int tokens[], int toks_size)
 				cur_buf += 5;
 				cur_tok++;
 			}
-			else if(cur_buf+3 < buf_size
+			else if(cur_buf+3 < buf_len
 				&& buf[cur_buf+1]=='d'
 				&& buf[cur_buf+2]=='e'
 				&& buf[cur_buf+3]=='f')
@@ -131,7 +131,7 @@ int lexer(char buf[], int buf_size, int tokens[], int toks_size)
 				int start;
 
 				start = cur_buf;
-				while( cur_buf < buf_size &&
+				while( cur_buf < buf_len &&
 						(  'a' <= buf[cur_buf] && buf[cur_buf] <= 'z'
 						|| 'A' <= buf[cur_buf] && buf[cur_buf] <= 'Z'
 						|| '0' <= buf[cur_buf] && buf[cur_buf] <= '9'

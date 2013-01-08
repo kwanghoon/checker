@@ -122,6 +122,9 @@ void prToks(int n)
 			break;
 		case NUM:
 			break;
+		case ENDOFSYMBOL:
+			printf("$\n");
+			break;
 		default:
 			printf("Invalid token: %d\n", tokens[i]);
 		}
