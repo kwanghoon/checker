@@ -15,6 +15,10 @@ static int tokens[TOKSSIZE];
 #define DAGSIZE 100000
 static DAG dag[DAGSIZE];
 
+#define CONSTLISTSIZE 100000
+static int const_list[CONSTLISTSIZE];  /* (index,name) */
+
+
 void run(char* filename);
 int  fillBuf(FILE *fp);
 void test();
