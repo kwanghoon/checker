@@ -75,6 +75,15 @@ void mkVar(DAG dag[], int i, int db_index, int buf_index, int t)
   dag[i].type = t;          // type
 }
 
+/* Temporary */
+void mkName(DAG dag[], int i, int buf_index, int str_length)
+{
+  dag[i].tag  = Tag_Name;   // Name
+  dag[i].arg1 = buf_index;  
+  dag[i].arg2 = str_length;  
+  dag[i].type = UNUSED;     // type
+}
+
 /* Utility */
 void addBVar(int const_list[], int ptr, int buf_index, int str_length, int dag_index)
 {

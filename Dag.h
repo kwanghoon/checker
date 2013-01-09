@@ -5,7 +5,9 @@
 enum Tag {
   Tag_Type, Tag_PiK,
   Tag_ConstA, Tag_AppA, Tag_PiA,
-  Tag_Var, Tag_ConstM, Tag_App, Tag_Lam
+  Tag_Var, Tag_ConstM, Tag_App, Tag_Lam,
+
+  Tag_Name
 };
 
 #define UNUSED   (-1)
@@ -34,5 +36,8 @@ void mkLam (DAG dag[], int i, int v, int tm);
 void mkApp(DAG dag[], int i, int f, int a);
 void mkConstM(DAG dag[], int i, int t);
 void mkVar(DAG dag[], int i, int db_index, int buf_index, int t);
+
+/* Temporary : either a ConstM or a Var */
+void mkName(DAG dag[], int i, int buf_index, int str_length);
 
 #endif  // DAG_H
